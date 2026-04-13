@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Sufi</string>
+
+    <!-- Navigation -->
+    <string name="nav_chasha">Chasha Saki</string>
+    <string name="nav_books">Books</string>
+    <string name="nav_articles">Articles</string>
+    <string name="nav_chat">Chat</string>
+    <string name="nav_menu">Menu</string>
+
+    <!-- Menu -->
+    <string name="menu_profile">Profile</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_about">About</string>
+    <string name="menu_update">Update</string>
+    <string name="menu_exit">Exit</string>
+
+    <!-- Filters -->
+    <string name="filter_all">All</string>
+    <string name="filter_articles">Articles</string>
+    <string name="filter_media">Media</string>
+    <string name="filter_vk">VK Feed</string>
+
+    <!-- Common -->
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="empty">No data</string>
+    <string name="in_development">In development</string>
+
+    <!-- Profile -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+    <string name="font_size">Font size</string>
+    <string name="font_family">Font family</string>
+</resources>

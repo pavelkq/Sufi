@@ -1,3 +1,48 @@
 <resources>
     <string name="app_name">Sufi</string>
+
+    <!-- Навигация -->
+    <string name="nav_chasha">Чаша Саки</string>
+    <string name="nav_books">Книги</string>
+    <string name="nav_articles">Статьи</string>
+    <string name="nav_chat">Чат</string>
+    <string name="nav_menu">Меню</string>
+
+    <!-- Меню -->
+    <string name="menu_profile">Профиль</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_about">О программе</string>
+    <string name="menu_update">Обновление</string>
+    <string name="menu_exit">Выход</string>
+
+    <!-- Фильтры статей -->
+    <string name="filter_all">Всё</string>
+    <string name="filter_articles">Статьи</string>
+    <string name="filter_media">Медиа</string>
+    <string name="filter_vk">Лента VK</string>
+
+    <!-- Общие -->
+    <string name="loading">Загрузка...</string>
+    <string name="error">Ошибка</string>
+    <string name="retry">Повторить</string>
+    <string name="empty">Нет данных</string>
+    <string name="in_development">В разработке</string>
+
+    <!-- Профиль -->
+    <string name="login">Вход</string>
+    <string name="register">Регистрация</string>
+    <string name="logout">Выход</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="name">Имя</string>
+
+    <!-- Настройки -->
+    <string name="settings">Настройки</string>
+    <string name="theme">Тема</string>
+    <string name="language">Язык</string>
+    <string name="font_size">Размер шрифта</string>
+    <string name="font_family">Шрифт</string>
+
+    <string name="menu">Меню</string>
+    <string name="close">Закрыть</string>
 </resources>

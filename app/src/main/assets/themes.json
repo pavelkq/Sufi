@@ -1,0 +1,88 @@
+{
+  "themes": [
+    {
+      "id": "earth",
+      "name": "🌍 Земля (Оранжево-коричневая)",
+      "colors": {
+        "primary": "#E67E22",
+        "primaryDark": "#D35400",
+        "primaryLight": "#F39C12",
+        "text": "#2C3E50",
+        "textSecondary": "#7F8C8D",
+        "background": "#FDF2E9",
+        "cardBackground": "#FFFFFF",
+        "accent": "#E67E22",
+        "buttonBackground": "#E67E22",
+        "buttonText": "#FFFFFF",
+        "menuBackground": "#E67E22",
+        "menuText": "#FFFFFF"
+      }
+    },
+    {
+      "id": "water",
+      "name": "💧 Вода (Зелёная)",
+      "colors": {
+        "primary": "#27AE60",
+        "primaryDark": "#1E8449",
+        "primaryLight": "#2ECC71",
+        "text": "#1A5276",
+        "textSecondary": "#5D6D7E",
+        "background": "#E8F8F5",
+        "cardBackground": "#FFFFFF",
+        "accent": "#27AE60",
+        "buttonBackground": "#27AE60",
+        "buttonText": "#FFFFFF",
+        "menuBackground": "#27AE60",
+        "menuText": "#FFFFFF"
+      }
+    },
+    {
+      "id": "fire",
+      "name": "🔥 Огонь (Красная)",
+      "colors": {
+        "primary": "#E74C3C",
+        "primaryDark": "#C0392B",
+        "primaryLight": "#EC7063",
+        "text": "#641E16",
+        "textSecondary": "#922B21",
+        "background": "#FDEDEC",
+        "cardBackground": "#FFFFFF",
+        "accent": "#E74C3C",
+        "buttonBackground": "#E74C3C",
+        "buttonText": "#FFFFFF",
+        "menuBackground": "#E74C3C",
+        "menuText": "#FFFFFF"
+      }
+    },
+    {
+      "id": "air",
+      "name": "💨 Воздух (Синяя)",
+      "colors": {
+        "primary": "#3498DB",
+        "primaryDark": "#2980B9",
+        "primaryLight": "#5DADE2",
+        "text": "#154360",
+        "textSecondary": "#5D6D7E",
+        "background": "#EBF5FB",
+        "cardBackground": "#FFFFFF",
+        "accent": "#3498DB",
+        "buttonBackground": "#3498DB",
+        "buttonText": "#FFFFFF",
+        "menuBackground": "#3498DB",
+        "menuText": "#FFFFFF"
+      }
+    }
+  ],
+  "fontSizes": [
+    { "id": "small", "name": "Маленький", "scale": 0.35 },
+    { "id": "medium", "name": "Средний", "scale": 0.47 },
+    { "id": "large", "name": "Большой", "scale": 0.6 },
+    { "id": "xlarge", "name": "Очень большой", "scale": 0.7 }
+  ],
+  "fontFamilies": [
+    { "id": "sans", "name": "Sans-serif", "css": "sans-serif" },
+    { "id": "serif", "name": "Serif", "css": "serif" },
+    { "id": "mono", "name": "Monospace", "css": "monospace" },
+    { "id": "system", "name": "Системный", "css": "-apple-system, BlinkMacSystemFont, Roboto, sans-serif" }
+  ]
+}

@@ -1,7 +1,9 @@
 package com.pasha.sufi.ui.base
 
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.pasha.sufi.R
 import com.pasha.sufi.theme.ThemeManager
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -20,6 +22,11 @@ abstract class BaseActivity : AppCompatActivity() {
     
     protected fun applyTheme() {
         ThemeManager.applyThemeToActivity(this)
+        
+        // Обновляем фон баннера
+        val banner = findViewById<ImageView>(R.id.bannerImageView)
+        banner?.setBackgroundColor(ThemeManager.getBackgroundColor())
+        
         onThemeApplied()
     }
     

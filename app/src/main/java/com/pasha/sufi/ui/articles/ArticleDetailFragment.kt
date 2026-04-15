@@ -8,6 +8,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.pasha.sufi.R
 import com.pasha.sufi.models.VkPost
@@ -17,9 +18,14 @@ class ArticleDetailFragment : Fragment() {
     
     private lateinit var webView: WebView
     private lateinit var progressBar: ProgressBar
-    private lateinit var btnClose: ImageButton
+    private lateinit var btnPrev: ImageButton
+    private lateinit var btnList: TextView
+    private lateinit var btnNext: ImageButton
+    private lateinit var tvTitle: TextView
     
-    private var post: VkPost? = null
+    private var currentPost: VkPost? = null
+    private var allPosts: List<VkPost> = emptyList()
+    private var currentIndex: Int = 0
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,19 +40,92 @@ class ArticleDetailFragment : Fragment() {
         
         webView = view.findViewById(R.id.webView)
         progressBar = view.findViewById(R.id.progressBar)
-        btnClose = view.findViewById(R.id.btnClose)
+        btnPrev = view.findViewById(R.id.btnPrev)
+        btnList = view.findViewById(R.id.btnList)
+        btnNext = view.findViewById(R.id.btnNext)
+        tvTitle = view.findViewById(R.id.tvTitle)
         
-        // Получаем пост из аргументов
-        post = arguments?.getSerializable("post") as? VkPost
+        // Получаем данные из аргументов
+        currentPost = arguments?.getSerializable("currentPost") as? VkPost
+        allPosts = (arguments?.getSerializable("allPosts") as? ArrayList<VkPost>) ?: emptyList()
+        currentIndex = arguments?.getInt("currentIndex") ?: 0
         
         setupWebView()
         applyTheme()
+        updateNavigationButtons()
+        setTitle()
         
-        btnClose.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
+        btnPrev.setOnClickListener { navigateToPrev() }
+        btnList.setOnClickListener { goBackToList() }
+        btnNext.setOnClickListener { navigateToNext() }
         
         loadContent()
+    }
+    
+    private fun updateNavigationButtons() {
+        btnPrev.visibility = if (currentIndex > 0) View.VISIBLE else View.INVISIBLE
+        btnNext.visibility = if (currentIndex < allPosts.size - 1) View.VISIBLE else View.INVISIBLE
+    }
+    
+    private fun navigateToPrev() {
+        if (currentIndex > 0) {
+            currentIndex--
+            currentPost = allPosts[currentIndex]
+            setTitle()
+            loadContent()
+            updateNavigationButtons()
+        }
+    }
+    
+    private fun navigateToNext() {
+        if (currentIndex < allPosts.size - 1) {
+            currentIndex++
+            currentPost = allPosts[currentIndex]
+            setTitle()
+            loadContent()
+            updateNavigationButtons()
+        }
+    }
+    
+    private fun goBackToList() {
+        parentFragmentManager.popBackStack()
+    }
+    
+    private fun getFirstSentence(text: String): String {
+        val trimmedText = text.trim()
+        if (trimmedText.isEmpty()) return "Пост ВКонтакте"
+        
+        // Ищем знаки препинания конца предложения
+        val sentenceEnders = listOf(".", "!", "?", "...", "!..", "?..", ".\"", "!\"", "?\"")
+        
+        // Ищем позицию первого знака конца предложения
+        var endIndex = -1
+        for (ender in sentenceEnders) {
+            val index = trimmedText.indexOf(ender)
+            if (index != -1 && (endIndex == -1 || index < endIndex)) {
+                endIndex = index + ender.length
+            }
+        }
+        
+        // Если нашли конец предложения
+        if (endIndex != -1 && endIndex <= 500) {
+            return trimmedText.substring(0, endIndex)
+        }
+        
+        // Если не нашли или предложение слишком длинное, берём до 500 символов
+        return if (trimmedText.length > 500) {
+            trimmedText.substring(0, 500) + "..."
+        } else {
+            trimmedText
+        }
+    }
+    
+    private fun setTitle() {
+        currentPost?.let {
+            val fullText = it.text.trim()
+            val firstSentence = getFirstSentence(fullText)
+            tvTitle.text = firstSentence
+        }
     }
     
     private fun setupWebView() {
@@ -69,16 +148,15 @@ class ArticleDetailFragment : Fragment() {
     }
     
     private fun loadContent() {
-        post?.let {
+        progressBar.visibility = View.VISIBLE
+        currentPost?.let {
             val htmlContent = generateHtml(it.text)
             webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null)
         }
     }
     
     private fun generateHtml(content: String): String {
-        // Базовая единица измерения в WebView - пиксели
-        // Используем 16px как базовый размер, умножаем на масштаб
-        val baseFontSize = 36 * ThemeManager.currentFontSize.scale
+        val baseFontSize = 44 * ThemeManager.currentFontSize.scale
         val css = """
             <style>
                 * {
@@ -92,7 +170,7 @@ class ArticleDetailFragment : Fragment() {
                     font-family: ${ThemeManager.currentFontFamily.css};
                     font-size: ${baseFontSize}px;
                     padding: 20px 16px;
-                    line-height: 1.6;
+                    line-height: 1.4;
                 }
                 p {
                     margin-bottom: 16px;
@@ -101,14 +179,6 @@ class ArticleDetailFragment : Fragment() {
                     color: ${ThemeManager.currentTheme.colors.primary};
                     text-decoration: none;
                 }
-                h1, h2, h3, h4, h5, h6 {
-                    color: ${ThemeManager.currentTheme.colors.primary};
-                    margin-bottom: 16px;
-                    margin-top: 24px;
-                }
-                h1 { font-size: ${baseFontSize * 1.5}px; }
-                h2 { font-size: ${baseFontSize * 1.3}px; }
-                h3 { font-size: ${baseFontSize * 1.2}px; }
                 img {
                     max-width: 100%;
                     height: auto;
@@ -148,21 +218,31 @@ class ArticleDetailFragment : Fragment() {
     
     private fun applyTheme() {
         view?.setBackgroundColor(ThemeManager.getBackgroundColor())
-        btnClose.setColorFilter(ThemeManager.getPrimaryColor())
+        btnPrev.setColorFilter(ThemeManager.getPrimaryColor())
+        btnList.setTextColor(ThemeManager.getPrimaryColor())
+        btnNext.setColorFilter(ThemeManager.getPrimaryColor())
+        tvTitle.setTextColor(ThemeManager.getTextColor())
+        
+        val scaledTitleSize = 44f * ThemeManager.currentFontSize.scale
+        tvTitle.textSize = scaledTitleSize
+        
+        val scaledListSize = 32f * ThemeManager.currentFontSize.scale
+        btnList.textSize = scaledListSize
     }
     
     override fun onResume() {
         super.onResume()
         applyTheme()
-        // Обновляем WebView при смене темы
         loadContent()
     }
     
     companion object {
-        fun newInstance(post: VkPost): ArticleDetailFragment {
+        fun newInstance(currentPost: VkPost, allPosts: List<VkPost>, currentIndex: Int): ArticleDetailFragment {
             val fragment = ArticleDetailFragment()
             val args = Bundle()
-            args.putSerializable("post", post)
+            args.putSerializable("currentPost", currentPost)
+            args.putSerializable("allPosts", ArrayList(allPosts))
+            args.putInt("currentIndex", currentIndex)
             fragment.arguments = args
             return fragment
         }

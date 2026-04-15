@@ -46,8 +46,8 @@ class ArticlesContainerFragment : BaseFragment() {
     
     private fun setupRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        vkPostsAdapter = VkPostsSimpleAdapter(emptyList()) { post ->
-            showFullPost(post)
+        vkPostsAdapter = VkPostsSimpleAdapter(emptyList()) { post, position ->
+            showFullPost(post, position)
         }
         recyclerView.adapter = vkPostsAdapter
     }
@@ -87,7 +87,6 @@ class ArticlesContainerFragment : BaseFragment() {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
         
-        // Загружаем VK ленту для "Всё" и "Лента VK"
         loadVkFeed()
         tabs.getTabAt(0)?.select()
     }
@@ -116,7 +115,6 @@ class ArticlesContainerFragment : BaseFragment() {
     }
     
     private fun loadAll() {
-        // Показываем VK ленту (так как других статей пока нет)
         loadVkFeed()
     }
     
@@ -186,9 +184,8 @@ class ArticlesContainerFragment : BaseFragment() {
         }
     }
     
-    private fun showFullPost(post: VkPost) {
-        // Открываем полноэкранный фрагмент
-        val detailFragment = ArticleDetailFragment.newInstance(post)
+    private fun showFullPost(post: VkPost, position: Int) {
+        val detailFragment = ArticleDetailFragment.newInstance(post, vkPosts, position)
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, detailFragment)
             .addToBackStack(null)

@@ -13,7 +13,7 @@ import java.util.*
 
 class VkPostsSimpleAdapter(
     private var posts: List<VkPost>,
-    private val onItemClick: (VkPost) -> Unit
+    private val onItemClick: (VkPost, Int) -> Unit
 ) : RecyclerView.Adapter<VkPostsSimpleAdapter.PostViewHolder>() {
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -23,7 +23,7 @@ class VkPostsSimpleAdapter(
     }
     
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(posts[position])
+        holder.bind(posts[position], position)
     }
     
     override fun getItemCount(): Int = posts.size
@@ -33,41 +33,62 @@ class VkPostsSimpleAdapter(
         notifyDataSetChanged()
     }
     
+    private fun getFirstSentence(text: String): String {
+        val trimmedText = text.trim()
+        if (trimmedText.isEmpty()) return "Пост без текста"
+        
+        val sentenceEnders = listOf(".", "!", "?", "...", "!..", "?..", ".\"", "!\"", "?\"")
+        
+        var endIndex = -1
+        for (ender in sentenceEnders) {
+            val index = trimmedText.indexOf(ender)
+            if (index != -1 && (endIndex == -1 || index < endIndex)) {
+                endIndex = index + ender.length
+            }
+        }
+        
+        if (endIndex != -1 && endIndex <= 500) {
+            return trimmedText.substring(0, endIndex)
+        }
+        
+        return if (trimmedText.length > 500) {
+            trimmedText.substring(0, 500) + "..."
+        } else {
+            trimmedText
+        }
+    }
+    
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         private val tvDate: TextView = itemView.findViewById(R.id.tvDate)
         
-        fun bind(post: VkPost) {
-            // Берём первые 100 символов как заголовок
-            val title = if (post.text.length > 100) {
-                post.text.substring(0, 100) + "..."
-            } else {
-                post.text
-            }.trim().ifEmpty { "Пост без текста" }
-            
+        fun bind(post: VkPost, position: Int) {
+            val fullText = post.text.trim()
+            val title = getFirstSentence(fullText)
             tvTitle.text = title
             
-            // Форматируем дату
             val date = Date(post.date * 1000)
             val dateFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("ru"))
             tvDate.text = dateFormat.format(date)
             
-            // Применяем тему и размер шрифта - используем sp для автоматического масштабирования
-            tvTitle.setTextColor(ThemeManager.getTextColor())
-            tvTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 36f)
-            tvDate.setTextColor(ThemeManager.getTextSecondaryColor())
-            tvDate.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 32f)
-            
-            // Применяем масштаб из настроек
-            val scaledSize = 36f * ThemeManager.currentFontSize.scale
-            tvTitle.textSize = scaledSize
-            tvDate.textSize = 32f * ThemeManager.currentFontSize.scale
-            
-            itemView.setBackgroundColor(ThemeManager.getCardBackgroundColor())
+            applyTheme()
             
             itemView.setOnClickListener {
-                onItemClick(post)
+                onItemClick(post, position)
             }
+        }
+        
+        private fun applyTheme() {
+            tvTitle.setTextColor(ThemeManager.getTextColor())
+            tvTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 46f)
+            tvDate.setTextColor(ThemeManager.getTextSecondaryColor())
+            tvDate.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 42f)
+            
+            val scaledSize = 46f * ThemeManager.currentFontSize.scale
+            tvTitle.textSize = scaledSize
+            tvDate.textSize = 42f * ThemeManager.currentFontSize.scale
+            
+            itemView.setBackgroundColor(ThemeManager.getCardBackgroundColor())
         }
     }
 }

@@ -9,6 +9,8 @@ import com.pasha.sufi.theme.ThemeManager
 
 abstract class BaseFragment : Fragment() {
     
+    private var isThemeApplied = false
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,11 +22,14 @@ abstract class BaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         applyTheme()
+        isThemeApplied = true
     }
     
     override fun onResume() {
         super.onResume()
-        applyTheme()
+        if (isThemeApplied) {
+            applyTheme()
+        }
     }
     
     protected fun applyTheme() {

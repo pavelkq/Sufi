@@ -6,9 +6,9 @@ import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
@@ -191,25 +191,29 @@ object ThemeManager {
     fun getMenuTextColor(): Int = getColor(currentTheme.colors.menuText)
     
     fun applyThemeToActivity(activity: AppCompatActivity) {
-        // Применяем цвет статус бара
         activity.window.setStatusBarColor(getPrimaryDarkColor())
-        
-        // Применяем цвет навигационной панели (для кнопок или жестов)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             activity.window.setNavigationBarColor(getPrimaryDarkColor())
         }
         
-        // Применяем тему к корневому view
         activity.window.decorView.rootView?.let { rootView ->
             applyThemeToView(rootView)
         }
         
-        // Обновляем фон нижней навигации
         val bottomNav = activity.window.decorView.rootView.findViewById<ViewGroup>(R.id.bottom_navigation)
         bottomNav?.setBackgroundColor(getPrimaryColor())
+        
+        // Обновляем фон баннера
+        val banner = activity.window.decorView.rootView.findViewById<ImageView>(R.id.bannerImageView)
+        banner?.setBackgroundColor(getBackgroundColor())
     }
     
     fun applyThemeToView(view: View) {
+        // Пропускаем баннер - он должен оставаться прозрачным
+        if (view.id == R.id.bannerImageView) {
+            return
+        }
+        
         when (view) {
             is ViewGroup -> {
                 view.children.forEach { child -> applyThemeToView(child) }
@@ -221,7 +225,6 @@ object ThemeManager {
             }
             is TextView -> {
                 view.setTextColor(getTextColor())
-                // Применяем масштаб шрифта
                 val originalSize = view.tag as? Float ?: view.textSize
                 if (view.tag == null) {
                     view.tag = view.textSize
@@ -255,15 +258,16 @@ object ThemeManager {
     }
     
     fun getWebViewCSS(): String {
+        val baseFontSize = 16 * currentFontSize.scale
         return """
             <style>
                 body {
                     background-color: ${currentTheme.colors.background};
                     color: ${currentTheme.colors.text};
                     font-family: ${currentFontFamily.css};
-                    font-size: ${16 * currentFontSize.scale}px;
-                    padding: 16px;
-                    line-height: 1.5;
+                    font-size: ${baseFontSize}px;
+                    padding: 20px 16px;
+                    line-height: 1.6;
                 }
                 a {
                     color: ${currentTheme.colors.primary};

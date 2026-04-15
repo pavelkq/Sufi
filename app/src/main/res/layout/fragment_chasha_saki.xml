@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:padding="16dp"
     android:background="@android:color/white">
 
@@ -10,34 +11,76 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Название раздела -->
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvSectionTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Чаша Саки"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:textAlignment="center"
+            android:layout_marginBottom="12dp" />
 
+        <!-- Дата -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="8dp"
+                android:text="16 июня" />
+
+            <Button
+                android:id="@+id/btnToday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Сегодня"
+                android:visibility="gone"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <!-- Основной текст -->
         <TextView
-            android:id="@+id/tvDate"
+            android:id="@+id/tvMainText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="#666666"
-            android:gravity="center"
-            android:layout_marginBottom="24dp" />
+            android:textSize="18sp"
+            android:text="Здесь будет основной текст"
+            android:lineSpacingExtra="2dp" />
 
+        <!-- Кнопка комментария -->
+        <Button
+            android:id="@+id/btnComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Комментарий Пир-о-Муршид\nХазрат Инайят Хана"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp" />
+
+        <!-- Комментарий -->
         <TextView
-            android:id="@+id/tvContent"
+            android:id="@+id/tvComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:lineSpacingExtra="6dp"
-            android:textColor="@android:color/black" />
+            android:visibility="gone"
+            android:layout_marginTop="16dp"
+            android:text="Здесь будет комментарий"
+            android:textSize="16sp"
+            android:lineSpacingExtra="2dp"
+            android:padding="8dp" />
 
     </LinearLayout>
-
 </ScrollView>
